@@ -4,23 +4,23 @@ import org.springframework.stereotype.Component;
 import ru.beresta.svs.vacationpay.model.Country;
 import ru.beresta.svs.vacationpay.service.VacationPayCalculator;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Component
 public class VacationPayCalculatorFactory {
 
-    private static final Map<Country, VacationPayCalculator> CALCULATORS = new HashMap<>();
+    private final Map<Country, VacationPayCalculator> calculators;
 
-    static {
-        CALCULATORS.put(Country.RUS, new VacationPayCalculatorRussia(2, RoundingMode.FLOOR, BigDecimal.valueOf(29.3)));
-        CALCULATORS.put(Country.BLR, new VacationPayCalculatorBelarus(4, RoundingMode.FLOOR, BigDecimal.valueOf(20)));
+    public VacationPayCalculatorFactory(List<VacationPayCalculator> calculatorList) {
+        this.calculators = calculatorList.stream()
+                .collect(Collectors.toMap(VacationPayCalculator::getCountry, Function.identity()));
     }
 
-    public static VacationPayCalculator getCalculator(Country country) {
-        VacationPayCalculator calculator = CALCULATORS.get(country);
+    public VacationPayCalculator getCalculator(Country country) {
+        VacationPayCalculator calculator = calculators.get(country);
         if (calculator == null) {
             throw new IllegalArgumentException("Unsupported vacation pay calculation for country: " + country);
         }

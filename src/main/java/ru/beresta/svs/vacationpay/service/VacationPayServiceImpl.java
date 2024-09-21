@@ -16,12 +16,16 @@ import java.time.temporal.ChronoUnit;
 @Service
 public class VacationPayServiceImpl implements VacationPayService {
     private final HolidayCalendarService calendarHolidaysService;
+    private final VacationPayCalculatorFactory calculatorFactory;
     private final Country DEFAULT_COUNTRY = Country.RUS;
 
     private static final Logger log = LoggerFactory.getLogger(VacationPayServiceImpl.class);
 
-    public VacationPayServiceImpl(HolidayCalendarService calendarHolidaysService) {
+    public VacationPayServiceImpl(
+            HolidayCalendarService calendarHolidaysService,
+            VacationPayCalculatorFactory calculatorFactory) {
         this.calendarHolidaysService = calendarHolidaysService;
+        this.calculatorFactory = calculatorFactory;
     }
 
     @Override
@@ -30,7 +34,7 @@ public class VacationPayServiceImpl implements VacationPayService {
 
         country = resolveCountry(country);
 
-        VacationPayCalculator payCalculator = VacationPayCalculatorFactory.getCalculator(country);
+        VacationPayCalculator payCalculator = calculatorFactory.getCalculator(country);
         log.debug("Selected VacationPayCalculator for country: {}", country);
 
         BigDecimal totalPay = payCalculator.calculate(averageSalary, vacationDays);

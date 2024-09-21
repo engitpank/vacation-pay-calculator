@@ -1,5 +1,7 @@
 package ru.beresta.svs.vacationpay.service.calculator;
 
+import ru.beresta.svs.vacationpay.config.env.PrecisionConfig;
+import ru.beresta.svs.vacationpay.config.env.RoundingConfig;
 import ru.beresta.svs.vacationpay.service.VacationPayCalculator;
 
 import java.math.BigDecimal;
@@ -10,9 +12,12 @@ public abstract class AbstractVacationPayCalculator implements VacationPayCalcul
     protected final int precision;
     protected final RoundingMode roundingMode;
 
-    protected AbstractVacationPayCalculator(int precision, RoundingMode roundingMode) {
-        this.precision = precision;
-        this.roundingMode = roundingMode;
+    protected AbstractVacationPayCalculator(
+            PrecisionConfig precisionConfig,
+            RoundingConfig roundingConfig
+    ) {
+        this.precision = precisionConfig.getPrecisionModeForCountry(getCountry());
+        this.roundingMode = roundingConfig.getRoundingModeForCountry(getCountry());
     }
 
     @Override

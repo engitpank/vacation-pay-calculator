@@ -1,14 +1,23 @@
 package ru.beresta.svs.vacationpay.service.calculator;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
+import org.springframework.stereotype.Component;
+import ru.beresta.svs.vacationpay.config.env.PrecisionConfig;
+import ru.beresta.svs.vacationpay.config.env.RoundingConfig;
+import ru.beresta.svs.vacationpay.config.env.WorkingDaysConfig;
+import ru.beresta.svs.vacationpay.model.Country;
 
+import java.math.BigDecimal;
+
+@Component
 public class VacationPayCalculatorRussia extends AbstractVacationPayCalculator {
+    private final Country country = Country.RUS;
     private final BigDecimal averageWorkingDaysPerYear;
 
-    public VacationPayCalculatorRussia(int precision, RoundingMode roundingMode, BigDecimal averageWorkingDaysPerYear) {
-        super(precision, roundingMode);
-        this.averageWorkingDaysPerYear = averageWorkingDaysPerYear;
+    public VacationPayCalculatorRussia(PrecisionConfig precisionConfig,
+                                       RoundingConfig roundingConfig,
+                                       WorkingDaysConfig workingDaysConfig) {
+        super(precisionConfig, roundingConfig);
+        this.averageWorkingDaysPerYear = workingDaysConfig.getAverageWorkingDaysForCountry(country);
     }
 
     @Override
@@ -18,5 +27,10 @@ public class VacationPayCalculatorRussia extends AbstractVacationPayCalculator {
 
     private BigDecimal calculatePayPerDay(BigDecimal averageSalary) {
         return averageSalary.divide(averageWorkingDaysPerYear, precision, roundingMode);
+    }
+
+    @Override
+    public Country getCountry() {
+        return country;
     }
 }
