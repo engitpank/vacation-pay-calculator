@@ -2,6 +2,7 @@ spring.application.name: vacation-pay-calculator
 server:
   error:
     include-message: always
+  port: 8080
 logging.level.ru.beresta.svs.vacationpay: DEBUG
 vacationpay:
   rounding:
