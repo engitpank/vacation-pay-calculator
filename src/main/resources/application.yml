@@ -1,4 +1,7 @@
 spring.application.name: vacation-pay-calculator
+server:
+  error:
+    include-message: always
 logging.level.ru.beresta.svs.vacationpay: DEBUG
 vacationpay:
   rounding:
