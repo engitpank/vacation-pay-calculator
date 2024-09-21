@@ -1,3 +1,18 @@
-spring:
-  application:
-    name: vacation-pay-calculator
+spring.application.name: vacation-pay-calculator
+logging.level.ru.beresta.svs.vacationpay: DEBUG
+vacationpay:
+  rounding:
+    default-mode: FLOOR
+    countries:
+      rus: FLOOR
+      blr: HALF_UP
+  precision:
+    default-mode: 2
+    countries:
+      rus: 2
+      blr: 2
+  average-working-days:
+    default-mode: 29.3
+    countries:
+      rus: 29.3
+      blr: 27.3
