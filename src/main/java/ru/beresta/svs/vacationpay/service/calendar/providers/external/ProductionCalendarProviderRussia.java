@@ -29,11 +29,11 @@ public class ProductionCalendarProviderRussia implements ProductionCalendarProvi
             final ResponseEntity<ProductionCalendar> responseEntity = restTemplate.exchange(
                     baseUrl + "?year={year}", HttpMethod.GET, null, typeReference, year);
             if (!responseEntity.getStatusCode().is2xxSuccessful()) {
-                throw new RuntimeException("Unexpected response from external service: " + responseEntity.getStatusCode());
+                throw new ProductionCalendarClientException("Unexpected response from external service: " + responseEntity.getStatusCode());
             }
             return responseEntity.getBody();
         } catch (RestClientException ex) {
-            throw new RuntimeException("Error fetching Production Calendar for year: " + year, ex);
+            throw new ProductionCalendarClientException("Error fetching Production Calendar for year: " + year, ex);
         }
     }
 

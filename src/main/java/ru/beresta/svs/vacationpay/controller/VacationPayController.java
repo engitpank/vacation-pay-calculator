@@ -2,7 +2,6 @@ package ru.beresta.svs.vacationpay.controller;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,13 +25,8 @@ public class VacationPayController {
     @PostMapping("/calculate")
     public ResponseEntity<VacationPayResponse> calculateVacationPay(
             @Valid @RequestBody VacationRequest request) {
-        try {
-            PayDetails result = processVacationRequest(request);
-            return ResponseEntity.ok(VacationPayResponse.from(result));
-        } catch (Exception e) {
-            log.error("Internal error", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
+        PayDetails result = processVacationRequest(request);
+        return ResponseEntity.ok(VacationPayResponse.from(result));
     }
 
     private PayDetails processVacationRequest(VacationRequest request) {

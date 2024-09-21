@@ -31,7 +31,7 @@ public enum Country {
         try {
             return Country.valueOf(countryCode.toUpperCase());
         } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException("Unsupported country: " + countryCode);
+            throw new UnsupportedCountryException("Unsupported country: " + countryCode);
         }
     }
 }

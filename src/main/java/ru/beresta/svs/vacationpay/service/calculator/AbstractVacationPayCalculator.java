@@ -32,10 +32,10 @@ public abstract class AbstractVacationPayCalculator implements VacationPayCalcul
     // Метод валидации входных данных
     private void validateInputs(BigDecimal averageSalary, int vacationDays) {
         if (vacationDays <= 0) {
-            throw new IllegalArgumentException("Vacation days must be greater than zero");
+            throw new VacationPayCalculationException("Vacation days must be greater than zero");
         }
         if (averageSalary == null || averageSalary.compareTo(BigDecimal.ZERO) <= 0) {
-            throw new IllegalArgumentException("Average salary must be greater than zero");
+            throw new VacationPayCalculationException("Average salary must be greater than zero");
         }
     }
 }

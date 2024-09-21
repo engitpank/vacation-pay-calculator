@@ -2,6 +2,7 @@ package ru.beresta.svs.vacationpay.service.calculator;
 
 import org.springframework.stereotype.Component;
 import ru.beresta.svs.vacationpay.model.Country;
+import ru.beresta.svs.vacationpay.model.UnsupportedCountryException;
 import ru.beresta.svs.vacationpay.service.VacationPayCalculator;
 
 import java.util.List;
@@ -22,7 +23,7 @@ public class VacationPayCalculatorFactory {
     public VacationPayCalculator getCalculator(Country country) {
         VacationPayCalculator calculator = calculators.get(country);
         if (calculator == null) {
-            throw new IllegalArgumentException("Unsupported vacation pay calculation for country: " + country);
+            throw new UnsupportedCountryException("Unsupported vacation pay calculation for country: " + country);
         }
         return calculator;
     }

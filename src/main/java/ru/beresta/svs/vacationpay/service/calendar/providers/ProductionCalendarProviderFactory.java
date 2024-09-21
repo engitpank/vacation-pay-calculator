@@ -2,6 +2,7 @@ package ru.beresta.svs.vacationpay.service.calendar.providers;
 
 import org.springframework.stereotype.Component;
 import ru.beresta.svs.vacationpay.model.Country;
+import ru.beresta.svs.vacationpay.model.UnsupportedCountryException;
 
 import java.util.List;
 import java.util.Map;
@@ -21,7 +22,7 @@ public class ProductionCalendarProviderFactory {
     public ProductionCalendarProvider getCalendar(Country country) {
         ProductionCalendarProvider provider = providers.get(country);
         if (provider == null) {
-            throw new IllegalArgumentException("Unsupported calendar provider for country: " + country);
+            throw new UnsupportedCountryException("Unsupported calendar provider for country: " + country);
         }
         return provider;
     }
