@@ -1,26 +1,25 @@
 package ru.beresta.svs.vacationpay.service.calendar.providers;
 
-import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Component;
 import ru.beresta.svs.vacationpay.model.Country;
-import ru.beresta.svs.vacationpay.service.calendar.providers.external.ProductionCalendarProviderRussia;
 
-import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Component
 public class ProductionCalendarProviderFactory {
 
-    private static final Map<Country, ProductionCalendarProvider> PROVIDERS = new HashMap<>();
+    private final Map<Country, ProductionCalendarProvider> providers;
 
-    static {
-        RestTemplateBuilder builder = new RestTemplateBuilder();
-        PROVIDERS.put(Country.RUS, new ProductionCalendarProviderRussia(builder));
-        PROVIDERS.put(Country.BLR, new ProductionCalendarProviderRussia(builder));
+    public ProductionCalendarProviderFactory(List<ProductionCalendarProvider> providerList) {
+        providers = providerList.stream()
+                .collect(Collectors.toMap(ProductionCalendarProvider::getCountry, Function.identity()));
     }
 
     public ProductionCalendarProvider getCalendar(Country country) {
-        ProductionCalendarProvider provider = PROVIDERS.get(country);
+        ProductionCalendarProvider provider = providers.get(country);
         if (provider == null) {
             throw new IllegalArgumentException("Unsupported calendar provider for country: " + country);
         }

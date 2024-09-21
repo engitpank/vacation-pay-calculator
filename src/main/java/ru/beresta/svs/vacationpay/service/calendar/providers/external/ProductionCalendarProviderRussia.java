@@ -1,26 +1,24 @@
 package ru.beresta.svs.vacationpay.service.calendar.providers.external;
 
-import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
+import ru.beresta.svs.vacationpay.config.env.CalendarProviderConfig;
+import ru.beresta.svs.vacationpay.model.Country;
 import ru.beresta.svs.vacationpay.model.ProductionCalendar;
 import ru.beresta.svs.vacationpay.service.calendar.providers.ProductionCalendarProvider;
 
-import java.time.Duration;
-
+@Component
 public class ProductionCalendarProviderRussia implements ProductionCalendarProvider {
     private final RestTemplate restTemplate;
-    //    @Value("${app.external.production-calendar}")
-    private final String baseUrl = "http://localhost:8081/prod-days/";
+    private final String baseUrl;
 
-    public ProductionCalendarProviderRussia(RestTemplateBuilder restTemplateBuilder) {
-        this.restTemplate = restTemplateBuilder
-                .setConnectTimeout(Duration.ofSeconds(5))
-                .setReadTimeout(Duration.ofSeconds(5))
-                .build();
+    public ProductionCalendarProviderRussia(RestTemplate restTemplate, CalendarProviderConfig providerConfig) {
+        this.baseUrl = providerConfig.getUrlForCountry(Country.RUS);
+        this.restTemplate = restTemplate;
     }
 
     @Override
@@ -37,5 +35,10 @@ public class ProductionCalendarProviderRussia implements ProductionCalendarProvi
         } catch (RestClientException ex) {
             throw new RuntimeException("Error fetching Production Calendar for year: " + year, ex);
         }
+    }
+
+    @Override
+    public Country getCountry() {
+        return Country.RUS;
     }
 }
