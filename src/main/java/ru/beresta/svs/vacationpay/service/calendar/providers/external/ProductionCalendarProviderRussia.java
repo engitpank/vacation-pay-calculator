@@ -1,5 +1,6 @@
 package ru.beresta.svs.vacationpay.service.calendar.providers.external;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +23,7 @@ public class ProductionCalendarProviderRussia implements ProductionCalendarProvi
     }
 
     @Override
+    @Cacheable(cacheNames = "calendar-provider-russia")
     public ProductionCalendar get(int year) {
         final ParameterizedTypeReference<ProductionCalendar> typeReference = new ParameterizedTypeReference<>() {
         };
