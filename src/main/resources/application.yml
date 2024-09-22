@@ -1,0 +1,27 @@
+spring.application.name: vacation-pay-calculator
+server:
+  error:
+    include-message: always
+  port: 8080
+logging.level.ru.beresta.svs.vacationpay: DEBUG
+vacationpay:
+  rounding:
+    default-mode: FLOOR
+    countries:
+      rus: FLOOR
+      blr: HALF_UP
+  precision:
+    default-mode: 2
+    countries:
+      rus: 2
+      blr: 2
+  average-working-days:
+    default-mode: 29.3
+    countries:
+      rus: 29.3
+      blr: 27.3
+  providers:
+    calendar:
+      url:
+        countries:
+          rus: http://localhost:8081/prod-days
