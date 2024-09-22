@@ -1,5 +1,7 @@
 package ru.beresta.svs.vacationpay.service.calendar;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import ru.beresta.svs.vacationpay.model.Country;
 import ru.beresta.svs.vacationpay.model.DayType;
@@ -16,6 +18,8 @@ import java.util.stream.Stream;
 
 @Service
 public class HolidayCalendarServiceImpl implements HolidayCalendarService {
+
+    private static final Logger log = LoggerFactory.getLogger(HolidayCalendarServiceImpl.class);
     private final ProductionCalendarProviderFactory productionCalendarProviderFactory;
 
     public HolidayCalendarServiceImpl(ProductionCalendarProviderFactory productionCalendarProviderFactory) {
@@ -24,11 +28,19 @@ public class HolidayCalendarServiceImpl implements HolidayCalendarService {
 
     @Override
     public List<LocalDate> get(LocalDate startDate, LocalDate endDate, Country country) {
-        ProductionCalendarProvider calendarProvider = productionCalendarProviderFactory.getCalendar(country);
+        List<ProductionCalendarProvider> calendarProviders = productionCalendarProviderFactory.getCalendars(country);
 
-        return getYearsInRange(startDate, endDate).stream()
-                .flatMap(year -> extractHolidaysInRange(calendarProvider.get(year).getDays(), startDate, endDate))
-                .collect(Collectors.toList());
+        for (ProductionCalendarProvider calendarProvider : calendarProviders) {
+            try {
+                return getYearsInRange(startDate, endDate).stream()
+                        .flatMap(year -> extractHolidaysInRange(calendarProvider.get(year).getDays(), startDate, endDate))
+                        .collect(Collectors.toList());
+            } catch (ProductionCalendarProviderException e) {
+                log.warn("Failed to get calendar from provider: {} with priority {}",
+                        calendarProvider.getClass().getSimpleName(), calendarProvider.getPriority(), e);
+            }
+        }
+        throw new ProductionCalendarProviderException("No available providers could return calendar data for country: " + country);
     }
 
     private Set<Integer> getYearsInRange(LocalDate startDate, LocalDate endDate) {

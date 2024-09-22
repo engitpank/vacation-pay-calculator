@@ -9,4 +9,6 @@ public interface ProductionCalendarProvider {
     ProductionCalendar get(int year);
 
     Country getCountry();
+
+    int getPriority();
 }
