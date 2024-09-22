@@ -8,7 +8,7 @@ import java.util.Map;
 
 @Configuration
 @ConfigurationProperties(prefix = "vacationpay.providers.calendar.url")
-public class CalendarProviderConfig {
+public class CalendarProviderUrlConfig {
     private Map<Country, String> countries;
 
     public String getUrlForCountry(Country country) {

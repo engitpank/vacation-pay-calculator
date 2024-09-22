@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
-import ru.beresta.svs.vacationpay.config.env.CalendarProviderConfig;
+import ru.beresta.svs.vacationpay.config.env.CalendarProviderUrlConfig;
 import ru.beresta.svs.vacationpay.model.Country;
 import ru.beresta.svs.vacationpay.model.ProductionCalendar;
 import ru.beresta.svs.vacationpay.service.calendar.ProductionCalendarProviderException;
@@ -18,7 +18,7 @@ public class ProductionCalendarProviderRussia implements ProductionCalendarProvi
     private final RestTemplate restTemplate;
     private final String baseUrl;
 
-    public ProductionCalendarProviderRussia(RestTemplate restTemplate, CalendarProviderConfig providerConfig) {
+    public ProductionCalendarProviderRussia(RestTemplate restTemplate, CalendarProviderUrlConfig providerConfig) {
         this.baseUrl = providerConfig.getUrlForCountry(Country.RUS);
         this.restTemplate = restTemplate;
     }
