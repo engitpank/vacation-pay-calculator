@@ -1,5 +1,6 @@
 package ru.beresta.svs.vacationpay.service.calendar.providers.external;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
@@ -17,10 +18,15 @@ import ru.beresta.svs.vacationpay.service.calendar.providers.ProductionCalendarP
 public class ProductionCalendarProviderRussia implements ProductionCalendarProvider {
     private final RestTemplate restTemplate;
     private final String baseUrl;
+    private final int priority;
 
-    public ProductionCalendarProviderRussia(RestTemplate restTemplate, CalendarProviderUrlConfig providerConfig) {
+    public ProductionCalendarProviderRussia(
+            RestTemplate restTemplate,
+            CalendarProviderUrlConfig providerConfig,
+            @Value("${vacationpay.providers.calendar.default-priority.external}") int priority) {
         this.baseUrl = providerConfig.getUrlForCountry(Country.RUS);
         this.restTemplate = restTemplate;
+        this.priority = priority;
     }
 
     @Override
@@ -47,6 +53,6 @@ public class ProductionCalendarProviderRussia implements ProductionCalendarProvi
 
     @Override
     public int getPriority() {
-        return 10;
+        return priority;
     }
 }
