@@ -22,6 +22,9 @@ vacationpay:
       blr: 27.3
   providers:
     calendar:
+      default-priority:
+        internal: 1
+        external: 10
       url:
         countries:
           rus: http://localhost:8081/prod-days

@@ -20,6 +20,11 @@ public class ProductionCalendar {
         public ProductionDay() {
         }
 
+        public ProductionDay(DayType type, LocalDate date) {
+            this.type = type;
+            this.date = date;
+        }
+
         public DayType getType() {
             return type;
         }
