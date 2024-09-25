@@ -7,7 +7,7 @@ import ru.beresta.svs.vacationpay.model.Country;
 import ru.beresta.svs.vacationpay.model.DayType;
 import ru.beresta.svs.vacationpay.model.ProductionCalendar;
 import ru.beresta.svs.vacationpay.service.calendar.providers.ProductionCalendarProvider;
-import ru.beresta.svs.vacationpay.service.calendar.providers.ProductionCalendarProviderFactory;
+import ru.beresta.svs.vacationpay.service.factory.ProductionCalendarProviderFactory;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -28,7 +28,7 @@ public class HolidayCalendarServiceImpl implements HolidayCalendarService {
 
     @Override
     public List<LocalDate> get(LocalDate startDate, LocalDate endDate, Country country) {
-        List<ProductionCalendarProvider> calendarProviders = productionCalendarProviderFactory.getCalendars(country);
+        List<ProductionCalendarProvider> calendarProviders = productionCalendarProviderFactory.get(country);
 
         for (ProductionCalendarProvider calendarProvider : calendarProviders) {
             try {

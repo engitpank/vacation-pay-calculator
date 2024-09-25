@@ -7,6 +7,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import ru.beresta.svs.vacationpay.config.env.MinPayPerDayConfig;
 import ru.beresta.svs.vacationpay.config.env.PrecisionConfig;
 import ru.beresta.svs.vacationpay.config.env.RoundingConfig;
 import ru.beresta.svs.vacationpay.config.env.WorkingDaysConfig;
@@ -29,16 +30,21 @@ class VacationPayCalculatorRussiaTest {
     @Mock
     WorkingDaysConfig workingDaysConfig;
 
+    @Mock
+    MinPayPerDayConfig minPayPerDayConfig;
+
     @BeforeEach
     void setUp() {
         Mockito.when(precisionConfig.getPrecisionModeForCountry(any())).thenReturn(2);
         Mockito.when(roundingConfig.getRoundingModeForCountry(any())).thenReturn(RoundingMode.FLOOR);
         Mockito.when(workingDaysConfig.getAverageWorkingDaysForCountry(any())).thenReturn(BigDecimal.valueOf(29.3));
+        Mockito.when(minPayPerDayConfig.getMinPayForCountry(any())).thenReturn(BigDecimal.valueOf(656.72));
     }
 
     @Test
     void doCalculate() {
-        VacationPayCalculator calculator = new VacationPayCalculatorRussia(precisionConfig, roundingConfig, workingDaysConfig);
+        VacationPayCalculator calculator = new VacationPayCalculatorRussia(precisionConfig, roundingConfig,
+                workingDaysConfig, minPayPerDayConfig);
 
         BigDecimal vacationPay = calculator.calculate(BigDecimal.valueOf(50000), 7);
 

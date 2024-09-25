@@ -9,7 +9,7 @@ vacationpay:
     default-mode: FLOOR
     countries:
       rus: FLOOR
-      blr: HALF_UP
+      blr: FLOOR
   precision:
     default-mode: 2
     countries:
@@ -19,7 +19,7 @@ vacationpay:
     default-mode: 29.3
     countries:
       rus: 29.3
-      blr: 27.3
+      blr: 29.7
   providers:
     calendar:
       default-priority:
@@ -28,3 +28,7 @@ vacationpay:
       url:
         countries:
           rus: http://localhost:8081/prod-days
+  min-pay:
+    default-mode: 0
+    countries:
+      rus: 656.72
