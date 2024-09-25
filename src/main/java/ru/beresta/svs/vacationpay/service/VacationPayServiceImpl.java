@@ -6,8 +6,8 @@ import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import ru.beresta.svs.vacationpay.model.Country;
 import ru.beresta.svs.vacationpay.model.PayDetails;
-import ru.beresta.svs.vacationpay.service.calculator.VacationPayCalculatorFactory;
 import ru.beresta.svs.vacationpay.service.calendar.HolidayCalendarService;
+import ru.beresta.svs.vacationpay.service.factory.VacationPayCalculatorFactory;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -34,7 +34,7 @@ public class VacationPayServiceImpl implements VacationPayService {
 
         country = resolveCountry(country);
 
-        VacationPayCalculator payCalculator = calculatorFactory.getCalculator(country);
+        VacationPayCalculator payCalculator = calculatorFactory.get(country);
         log.debug("Selected VacationPayCalculator for country: {}", country);
 
         BigDecimal totalPay = payCalculator.calculate(averageSalary, vacationDays);

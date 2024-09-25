@@ -1,8 +1,8 @@
-package ru.beresta.svs.vacationpay.service.calendar.providers;
+package ru.beresta.svs.vacationpay.service.factory;
 
 import org.springframework.stereotype.Component;
 import ru.beresta.svs.vacationpay.model.Country;
-import ru.beresta.svs.vacationpay.model.UnsupportedCountryException;
+import ru.beresta.svs.vacationpay.service.calendar.providers.ProductionCalendarProvider;
 import ru.beresta.svs.vacationpay.service.calendar.providers.local.CsvAnyCountryProductionCalendarProvider;
 import ru.beresta.svs.vacationpay.service.calendar.providers.local.CsvProvidersInitializer;
 
@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Component
-public class ProductionCalendarProviderFactory {
+public class ProductionCalendarProviderFactory extends AbstractByCountryFactory<List<ProductionCalendarProvider>> {
 
     private final Map<Country, List<ProductionCalendarProvider>> providers;
 
@@ -26,16 +26,13 @@ public class ProductionCalendarProviderFactory {
                         ProductionCalendarProvider::getCountry, Collectors.collectingAndThen(Collectors.toList(), list ->
                         {
                             list.sort(Comparator.comparingInt(ProductionCalendarProvider::getPriority));
-                            return list;
+                            return List.copyOf(list);
                         })
                 ));
     }
 
-    public List<ProductionCalendarProvider> getCalendars(Country country) {
-        List<ProductionCalendarProvider> providerList = providers.get(country);
-        if (providerList == null || providerList.isEmpty()) {
-            throw new UnsupportedCountryException("Unsupported calendar provider for country: " + country);
-        }
-        return providerList;
+    @Override
+    protected List<ProductionCalendarProvider> getEntity(Country country) {
+        return providers.get(country);
     }
 }

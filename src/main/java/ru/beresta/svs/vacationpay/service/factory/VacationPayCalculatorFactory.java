@@ -1,8 +1,7 @@
-package ru.beresta.svs.vacationpay.service.calculator;
+package ru.beresta.svs.vacationpay.service.factory;
 
 import org.springframework.stereotype.Component;
 import ru.beresta.svs.vacationpay.model.Country;
-import ru.beresta.svs.vacationpay.model.UnsupportedCountryException;
 import ru.beresta.svs.vacationpay.service.VacationPayCalculator;
 
 import java.util.List;
@@ -11,7 +10,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Component
-public class VacationPayCalculatorFactory {
+public class VacationPayCalculatorFactory extends AbstractByCountryFactory<VacationPayCalculator> {
 
     private final Map<Country, VacationPayCalculator> calculators;
 
@@ -20,11 +19,8 @@ public class VacationPayCalculatorFactory {
                 .collect(Collectors.toMap(VacationPayCalculator::getCountry, Function.identity()));
     }
 
-    public VacationPayCalculator getCalculator(Country country) {
-        VacationPayCalculator calculator = calculators.get(country);
-        if (calculator == null) {
-            throw new UnsupportedCountryException("Unsupported vacation pay calculation for country: " + country);
-        }
-        return calculator;
+    @Override
+    protected VacationPayCalculator getEntity(Country country) {
+        return calculators.get(country);
     }
 }
