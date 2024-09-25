@@ -28,3 +28,7 @@ vacationpay:
       url:
         countries:
           rus: http://localhost:8081/prod-days
+  min-pay:
+    default-mode: 0
+    countries:
+      rus: 656.72

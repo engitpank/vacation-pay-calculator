@@ -1,6 +1,7 @@
 package ru.beresta.svs.vacationpay.service.calculator;
 
 import org.springframework.stereotype.Component;
+import ru.beresta.svs.vacationpay.config.env.MinPayPerDayConfig;
 import ru.beresta.svs.vacationpay.config.env.PrecisionConfig;
 import ru.beresta.svs.vacationpay.config.env.RoundingConfig;
 import ru.beresta.svs.vacationpay.config.env.WorkingDaysConfig;
@@ -14,14 +15,15 @@ public class VacationPayCalculatorRussia extends AbstractVacationPayCalculator {
 
     public VacationPayCalculatorRussia(PrecisionConfig precisionConfig,
                                        RoundingConfig roundingConfig,
-                                       WorkingDaysConfig workingDaysConfig) {
-        super(precisionConfig, roundingConfig, Country.RUS);
+                                       WorkingDaysConfig workingDaysConfig,
+                                       MinPayPerDayConfig minPayPerDayConfig) {
+        super(precisionConfig, roundingConfig, minPayPerDayConfig, Country.RUS);
         this.averageWorkingDaysPerYear = workingDaysConfig.getAverageWorkingDaysForCountry(country);
     }
 
     @Override
-    protected BigDecimal doCalculate(BigDecimal averageSalary, int vacationDays) {
-        return BigDecimal.valueOf(vacationDays).multiply(calculatePayPerDay(averageSalary));
+    protected BigDecimal doCalculate(BigDecimal averageSalary, BigDecimal vacationDays) {
+        return vacationDays.multiply(calculatePayPerDay(averageSalary));
     }
 
     private BigDecimal calculatePayPerDay(BigDecimal averageSalary) {
