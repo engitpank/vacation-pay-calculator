@@ -11,13 +11,12 @@ import java.math.BigDecimal;
 @Component
 public class VacationPayCalculatorBelarus extends AbstractVacationPayCalculator {
     private final BigDecimal averageWorkingDaysPerYear;
-    private final Country country = Country.BLR;
 
     public VacationPayCalculatorBelarus(
             PrecisionConfig precisionConfig,
             RoundingConfig roundingConfig,
             WorkingDaysConfig workingDaysConfig) {
-        super(precisionConfig, roundingConfig);
+        super(precisionConfig, roundingConfig, Country.BLR);
         this.averageWorkingDaysPerYear = workingDaysConfig.getAverageWorkingDaysForCountry(country);
     }
 
@@ -28,10 +27,5 @@ public class VacationPayCalculatorBelarus extends AbstractVacationPayCalculator 
 
     private BigDecimal calculatePayPerDay(BigDecimal averageSalary) {
         return averageSalary.divide(averageWorkingDaysPerYear, precision, roundingMode);
-    }
-
-    @Override
-    public Country getCountry() {
-        return country;
     }
 }

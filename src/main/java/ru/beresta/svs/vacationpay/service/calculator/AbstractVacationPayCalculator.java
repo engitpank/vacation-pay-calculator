@@ -2,6 +2,7 @@ package ru.beresta.svs.vacationpay.service.calculator;
 
 import ru.beresta.svs.vacationpay.config.env.PrecisionConfig;
 import ru.beresta.svs.vacationpay.config.env.RoundingConfig;
+import ru.beresta.svs.vacationpay.model.Country;
 import ru.beresta.svs.vacationpay.service.VacationPayCalculator;
 
 import java.math.BigDecimal;
@@ -11,13 +12,16 @@ public abstract class AbstractVacationPayCalculator implements VacationPayCalcul
 
     protected final int precision;
     protected final RoundingMode roundingMode;
+    protected final Country country;
 
     protected AbstractVacationPayCalculator(
             PrecisionConfig precisionConfig,
-            RoundingConfig roundingConfig
+            RoundingConfig roundingConfig,
+            Country country
     ) {
-        this.precision = precisionConfig.getPrecisionModeForCountry(getCountry());
-        this.roundingMode = roundingConfig.getRoundingModeForCountry(getCountry());
+        this.country = country;
+        this.precision = precisionConfig.getPrecisionModeForCountry(country);
+        this.roundingMode = roundingConfig.getRoundingModeForCountry(country);
     }
 
     @Override
@@ -26,10 +30,8 @@ public abstract class AbstractVacationPayCalculator implements VacationPayCalcul
         return doCalculate(averageSalary, vacationDays);
     }
 
-    // Абстрактный метод, который будет реализован в подклассах для специфичных расчетов
     protected abstract BigDecimal doCalculate(BigDecimal averageSalary, int vacationDays);
 
-    // Метод валидации входных данных
     private void validateInputs(BigDecimal averageSalary, int vacationDays) {
         if (vacationDays <= 0) {
             throw new VacationPayCalculationException("Vacation days must be greater than zero");
@@ -37,5 +39,10 @@ public abstract class AbstractVacationPayCalculator implements VacationPayCalcul
         if (averageSalary == null || averageSalary.compareTo(BigDecimal.ZERO) <= 0) {
             throw new VacationPayCalculationException("Average salary must be greater than zero");
         }
+    }
+
+    @Override
+    public Country getCountry() {
+        return country;
     }
 }
